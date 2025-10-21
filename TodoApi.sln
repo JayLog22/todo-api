@@ -1,14 +1,14 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi", "TodoApi.csproj", "{AF648FE9-199F-4EAC-A784-637FC2033334}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi", "src\TodoApi\TodoApi.csproj", "{AF648FE9-199F-4EAC-A784-637FC2033334}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.Core", "TodoApi.Core\TodoApi.Core.csproj", "{A5358D8C-E177-40A8-A3E8-B61CF26C4042}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.Core", "src\TodoApi.Core\TodoApi.Core.csproj", "{A5358D8C-E177-40A8-A3E8-B61CF26C4042}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.Infrastructure", "TodoApi.Infrastructure\TodoApi.Infrastructure.csproj", "{991A60C7-5CB7-4F5A-83F7-DAC2154D1702}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.Infrastructure", "src\TodoApi.Infrastructure\TodoApi.Infrastructure.csproj", "{991A60C7-5CB7-4F5A-83F7-DAC2154D1702}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.UnitTests", "TodoApi.UnitTests\TodoApi.UnitTests.csproj", "{DDF8F6BA-590D-47C9-9F95-B2EE5E2EF622}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.UnitTests", "tests\TodoApi.UnitTests\TodoApi.UnitTests.csproj", "{DDF8F6BA-590D-47C9-9F95-B2EE5E2EF622}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.IntegrationTests", "TodoApi.IntegrationTests\TodoApi.IntegrationTests.csproj", "{7CB3DC39-BF1B-4622-A896-1A993A58E5C8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TodoApi.IntegrationTests", "tests\TodoApi.IntegrationTests\TodoApi.IntegrationTests.csproj", "{7CB3DC39-BF1B-4622-A896-1A993A58E5C8}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{5831E3E9-507C-4A3A-8F39-CF8049C7F6DD}"
 EndProject
