@@ -1,0 +1,42 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+    <PropertyGroup>
+        <TargetFramework>net8.0</TargetFramework>
+        <Nullable>enable</Nullable>
+        <ImplicitUsings>enable</ImplicitUsings>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="FluentValidation" Version="12.0.0" />
+        <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="12.0.0" />
+        <PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="8.0.20"/>
+        <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.21">
+            <PrivateAssets>all</PrivateAssets>
+            <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+        </PackageReference>
+        <PackageReference Include="Swashbuckle.AspNetCore" Version="6.6.2"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Folder Include="TodoApi.IntegrationTests\" />
+        <Folder Include="TodoApi.UnitTests\" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <ProjectReference Include="..\TodoApi.Core\TodoApi.Core.csproj" />
+        <ProjectReference Include="..\TodoApi.Infrastructure\TodoApi.Infrastructure.csproj" />
+    </ItemGroup>
+
+    <ItemGroup>
+        <_ContentIncludedByDefault Remove="TodoApi.IntegrationTests\obj\project.assets.json" />
+        <_ContentIncludedByDefault Remove="TodoApi.IntegrationTests\obj\project.packagespec.json" />
+        <_ContentIncludedByDefault Remove="TodoApi.IntegrationTests\obj\TodoApi.IntegrationTests.csproj.nuget.dgspec.json" />
+        <_ContentIncludedByDefault Remove="TodoApi.UnitTests\bin\Debug\net8.0\TodoApi.UnitTests.deps.json" />
+        <_ContentIncludedByDefault Remove="TodoApi.UnitTests\bin\Debug\net8.0\TodoApi.UnitTests.runtimeconfig.json" />
+        <_ContentIncludedByDefault Remove="TodoApi.UnitTests\obj\Debug\net8.0\TodoApi.UnitTests.sourcelink.json" />
+        <_ContentIncludedByDefault Remove="TodoApi.UnitTests\obj\project.assets.json" />
+        <_ContentIncludedByDefault Remove="TodoApi.UnitTests\obj\project.packagespec.json" />
+        <_ContentIncludedByDefault Remove="TodoApi.UnitTests\obj\TodoApi.UnitTests.csproj.nuget.dgspec.json" />
+    </ItemGroup>
+
+</Project>
