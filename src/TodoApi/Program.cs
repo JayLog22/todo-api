@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using TodoApi.Infrastructure.Data;
 using TodoApi.Infrastructure.Repositories;
+using TodoApi.Mappings;
+using TodoApi.Services.Implementations;
+using TodoApi.Services.Interfaces;
 using TodoApi.TodoApi.Core.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -9,13 +12,16 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-
+builder.Services.AddAutoMapper(cfg => cfg.AddProfile<MappingProfile>());
 //DbContext setup
 builder.Services.AddDbContext<TodoDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
 //Register repositories
 builder.Services.AddScoped<ITodoTaskRepository, TodoTaskRepository>();
+
+//Register services
+builder.Services.AddScoped<ITodoTaskService, TodoTaskService>();
 
 var app = builder.Build();
 
