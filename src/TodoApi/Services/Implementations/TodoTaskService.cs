@@ -21,19 +21,17 @@ public class TodoTaskService : ITodoTaskService
         _mapper = mapper;
     }
 
-    public async Task<IEnumerable<TodoTaskDto>> GetAllTasksAsync(bool? isCompleted = null,
-        string? priority = null)
+    public async Task<IEnumerable<TodoTaskDto>> GetAllTasksAsync(GetAllTodoTaskFilterDto filterDto)
     {
         IEnumerable<TodoTask> tasks;
 
-        if (isCompleted.HasValue)
+        if (filterDto.IsCompleted.HasValue)
         {
-            tasks = await _repository.GetByCompletionStatusAsync(isCompleted.Value);
+            tasks = await _repository.GetByCompletionStatusAsync(filterDto.IsCompleted.Value);
         }
-        else if (!string.IsNullOrEmpty(priority) &&
-                 Enum.TryParse<Priority>(priority, true, out var priorityEnum))
+        else if (filterDto.Priority.HasValue)
         {
-            tasks = await _repository.GetByPriorityAsync(priorityEnum);
+            tasks = await _repository.GetByPriorityAsync(filterDto.Priority.Value);
         }
         else
         {
@@ -62,19 +60,40 @@ public class TodoTaskService : ITodoTaskService
     public async Task<bool> UpdateTaskAsync(Guid id, UpdateTodoTaskDto updateDto)
     {
         var task = await _repository.GetByIdAsync(id);
-
         if (task == null)
         {
-            _logger.LogWarning("Attempted to updated non-existent task with ID {TaskId}", id);
+            _logger.LogWarning("Attempted to patch non-existent task {TaskId}", id);
             return false;
         }
 
+        // LOG ANTES
+        Console.WriteLine($"BEFORE - Tags: '{task.Tags ?? "NULL"}'");
+        Console.WriteLine($"DTO Tags: '{updateDto.Tags ?? "NULL"}'");
+    
         _mapper.Map(updateDto, task);
+    
+        // LOG DESPUÉS
+        Console.WriteLine($"AFTER - Tags: '{task.Tags ?? "NULL"}'");
+    
         await _repository.UpdateAsync(task);
-
-        _logger.LogInformation("Task {TaskId} updated successfully ", id);
-
+    
+        _logger.LogInformation("Task {TaskId} patched successfully", id);
+    
         return true;
+        // var task = await _repository.GetByIdAsync(id);
+        //
+        // if (task == null)
+        // {
+        //     _logger.LogWarning("Attempted to updated non-existent task with ID {TaskId}", id);
+        //     return false;
+        // }
+        //
+        // _mapper.Map(updateDto, task);
+        // await _repository.UpdateAsync(task);
+        //
+        // _logger.LogInformation("Task {TaskId} updated successfully ", id);
+        //
+        // return true;
     }
 
     public async Task<bool> DeleteTaskAsync(Guid id)

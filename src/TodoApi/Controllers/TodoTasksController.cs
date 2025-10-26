@@ -22,13 +22,11 @@ public class TodoTasksController : ControllerBase
     }
 
     [HttpGet]
-    public async Task<ActionResult<IEnumerable<TodoTaskDto>>> GetAll(
-        [FromQuery] bool? isCompleted = null,
-        [FromQuery] string? priority = null)
+    public async Task<ActionResult<IEnumerable<TodoTaskDto>>> GetAll([FromQuery] GetAllTodoTaskFilterDto filter)
     {
         try
         {
-            var tasks = await _service.GetAllTasksAsync(isCompleted, priority);
+            var tasks = await _service.GetAllTasksAsync(filter);
             return Ok(tasks);
         }
         catch (Exception ex)
@@ -72,7 +70,7 @@ public class TodoTasksController : ControllerBase
         }
     }
 
-    [HttpPut("{id:guid}")]
+    [HttpPatch("{id:guid}")]
     public async Task<ActionResult> Update(Guid id, [FromBody] UpdateTodoTaskDto updateDto)
     {
         try

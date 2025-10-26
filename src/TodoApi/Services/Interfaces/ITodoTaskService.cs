@@ -5,7 +5,7 @@ namespace TodoApi.Services.Interfaces;
 
 public interface ITodoTaskService
 {
-    Task<IEnumerable<TodoTaskDto>> GetAllTasksAsync(bool? isCompleted = null, string? priority = null);
+    Task<IEnumerable<TodoTaskDto>> GetAllTasksAsync(GetAllTodoTaskFilterDto filterDto);
     Task<TodoTaskDto?> GetTaskByIdAsync(Guid id);
     Task<TodoTaskDto> CreateTaskAsync(CreateTodoTaskDto createDto);
     Task<bool> UpdateTaskAsync(Guid id, UpdateTodoTaskDto updateDto);
