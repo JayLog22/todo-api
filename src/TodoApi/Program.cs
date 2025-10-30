@@ -10,6 +10,7 @@ using FluentValidation;
 using Microsoft.OpenApi.Models;
 using TodoApi.Converters;
 using TodoApi.Filters;
+using TodoApi.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,6 +56,9 @@ builder.Services.AddScoped<ITodoTaskRepository, TodoTaskRepository>();
 builder.Services.AddScoped<ITodoTaskService, TodoTaskService>();
 
 var app = builder.Build();
+
+//Register middleware
+app.UseMiddleware<ExceptionHandlingMiddleware>();
 
 //Seed DB
 using (var scope = app.Services.CreateScope())
