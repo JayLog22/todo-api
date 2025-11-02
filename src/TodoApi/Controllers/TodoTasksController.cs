@@ -13,117 +13,86 @@ namespace TodoApi.Controllers;
 public class TodoTasksController : ControllerBase
 {
     private readonly ITodoTaskService _service;
-    private readonly ILogger<TodoTasksController> _logger;
 
-    public TodoTasksController(ITodoTaskService service, ILogger<TodoTasksController> logger)
+    public TodoTasksController(ITodoTaskService service)
     {
         _service = service;
-        _logger = logger;
     }
 
+    /// <summary>
+    /// Get all tasks with optional filters
+    /// </summary>
     [HttpGet]
     public async Task<ActionResult<IEnumerable<TodoTaskDto>>> GetAll([FromQuery] GetAllTodoTaskFilterDto filter)
     {
-        try
-        {
-            var tasks = await _service.GetAllTasksAsync(filter);
-            return Ok(tasks);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving tasks");
-            return StatusCode(500, "An error occurred while retrieving tasks");
-        }
+        var tasks = await _service.GetAllTasksAsync(filter);
+        return Ok(tasks);
     }
 
+    /// <summary>
+    /// Get a specific task by ID
+    /// </summary>
     [HttpGet("{id:guid}")]
     public async Task<ActionResult<TodoTaskDto>> GetById(Guid id)
     {
-        try
-        {
-            var taskDto = await _service.GetTaskByIdAsync(id);
+        var taskDto = await _service.GetTaskByIdAsync(id);
 
-            if (taskDto == null)
-                return NotFound($"Task with id {id} was not found");
+        if (taskDto == null)
+            return NotFound($"Task with id {id} was not found");
 
-            return Ok(taskDto);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error retrieving task {TaskId}", id);
-            return StatusCode(500, "An error occurred while retrieving task");
-        }
+        return Ok(taskDto);
     }
-
+    
+    /// <summary>
+    /// Create a new task
+    /// </summary>
     [HttpPost]
     public async Task<ActionResult<TodoTaskDto>> Create([FromBody] CreateTodoTaskDto createDto)
     {
-        try
-        {
-            var createdTask = await _service.CreateTaskAsync(createDto);
-            return CreatedAtAction(nameof(GetById), new { id = createdTask.Id }, createDto);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error creating task");
-            return StatusCode(500, "An error occurred while creating task");
-        }
+        var createdTask = await _service.CreateTaskAsync(createDto);
+        return CreatedAtAction(nameof(GetById), new { id = createdTask.Id }, createDto);
     }
 
+    /// <summary>
+    /// Update a task
+    /// </summary>
     [HttpPatch("{id:guid}")]
     public async Task<ActionResult> Update(Guid id, [FromBody] UpdateTodoTaskDto updateDto)
     {
-        try
-        {
-            var success = await _service.UpdateTaskAsync(id, updateDto);
+        var success = await _service.UpdateTaskAsync(id, updateDto);
 
-            if (!success)
-                return NotFound(new {message = $"Task with id {id} was not found when trying to Update"});
-            
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error updating task {TaskId}", id);
-            return StatusCode(500, "An error occurred while updating the task");
-        }
+        if (!success)
+            return NotFound(new { message = $"Task with id {id} was not found when trying to Update" });
+
+        return NoContent();
     }
 
+    /// <summary>
+    /// Delete a specific task
+    /// </summary>
     [HttpDelete("{id:guid}")]
     public async Task<ActionResult> Delete(Guid id)
     {
-        try
-        {
-            var success = await _service.DeleteTaskAsync(id);
+        var success = await _service.DeleteTaskAsync(id);
 
-            if (!success)
-                return NotFound(new {message = $"Task with id {id} was not found when trying to Delete"});
-            
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error deleting task {TaskId}", id);
-            return StatusCode(500, "An error occurred while deleting the task");
-        }
+        if (!success)
+            return NotFound(new { message = $"Task with id {id} was not found when trying to Delete" });
+
+        return NoContent();
     }
 
+    /// <summary>
+    /// Toggle task completion status
+    /// </summary>
     [HttpPatch("{id:guid}/toggle")]
     public async Task<ActionResult> ToggleComplete(Guid id)
     {
-        try
-        {
-            var success = await _service.ToggleTaskCompletionAsync(id);
+        var success = await _service.ToggleTaskCompletionAsync(id);
 
-            if (!success)
-                return NotFound(new {message = $"Task with id {id} was not found when trying to Toggle its completion"});
+        if (!success)
+            return NotFound(new
+                { message = $"Task with id {id} was not found when trying to Toggle its completion" });
 
-            return NoContent();
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Error toggling task {TaskId}", id);
-            return StatusCode(500, "An error occurred while toggling the task");
-        }
+        return NoContent();
     }
 }
