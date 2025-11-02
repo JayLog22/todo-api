@@ -43,10 +43,6 @@ public class TodoTaskService : ITodoTaskService
 
     public async Task<TodoTaskDto?> GetTaskByIdAsync(Guid id)
     {
-        // TEMPORAL: Para probar el middleware
-        if (id == Guid.Parse("11111111-1111-1111-1111-111111111111"))
-            throw new Exception("Test exception - simulating server error");
-        
         var task = await _repository.GetByIdAsync(id);
         return task == null ? null : _mapper.Map<TodoTaskDto>(task);
     }
