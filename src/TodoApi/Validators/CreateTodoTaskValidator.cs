@@ -31,6 +31,10 @@ public class CreateTodoTaskValidator : AbstractValidator<CreateTodoTaskDto>
 
     private bool BeAValidPriority(string priority)
     {
-        return Enum.TryParse<Priority>(priority, true, out _);
+        if (string.IsNullOrEmpty(priority))
+            return false;
+        
+        return Enum.TryParse<Priority>(priority, true, out _) 
+            && !int.TryParse(priority, out _);
     }
 }
