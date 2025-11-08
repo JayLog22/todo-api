@@ -1,0 +1,291 @@
+# 📝 Todo API
+
+A RESTful API for managing todo tasks built with .NET 8, following Clean Architecture principles.
+
+## 🏗️ Architecture
+
+This project implements **Clean Architecture** with the following layers:
+```
+TodoApi/
+├── src/
+│   ├── TodoApi.Core/          # Domain entities and interfaces
+│   ├── TodoApi.Infrastructure/ # Data access and repositories
+│   └── TodoApi/                # API controllers and services
+└── tests/
+    └── TodoApi.UnitTests/      # Unit tests
+```
+
+### Design Patterns
+- **Repository Pattern** for data access abstraction
+- **Dependency Injection** for loose coupling
+- **DTO Pattern** for API contracts
+- **Middleware Pattern** for global exception handling
+
+---
+
+## 🛠️ Technologies
+
+- **.NET 8** - Latest LTS version
+- **ASP.NET Core Web API** - RESTful API framework
+- **Entity Framework Core 8** - ORM for database access
+- **SQL Server 2022** - Relational database
+- **Docker & Docker Compose** - Containerization
+- **FluentValidation** - Input validation
+- **AutoMapper** - Object-to-object mapping
+- **Swagger/OpenAPI** - API documentation
+- **xUnit** - Unit testing framework
+- **Moq** - Mocking framework
+- **FluentAssertions** - Assertion library
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+- [Docker Desktop](https://www.docker.com/products/docker-desktop) installed
+
+### Running with Docker (Recommended)
+
+1. **Clone the repository**
+```bash
+   git clone https://github.com/YOUR_USERNAME/todo-api.git
+   cd todo-api
+```
+
+2. **Create environment file**
+```bash
+   cp .env.example .env
+```
+
+3. **Start the application**
+```bash
+   docker-compose up
+```
+
+4. **Open Swagger UI**
+```
+   http://localhost:5000/swagger
+```
+
+That's it! 🎉 The API and database are now running.
+
+### Running locally (without Docker)
+
+1. **Install prerequisites**
+   - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
+   - [SQL Server](https://www.microsoft.com/sql-server/sql-server-downloads)
+
+2. **Update connection string**
+   Edit `src/TodoApi/appsettings.json` with your SQL Server connection.
+
+3. **Run migrations**
+```bash
+   dotnet ef database update --project src/TodoApi.Infrastructure --startup-project src/TodoApi
+```
+
+4. **Run the API**
+```bash
+   dotnet run --project src/TodoApi
+```
+
+---
+
+## 📚 API Endpoints
+
+### Tasks
+
+| Method | Endpoint | Description |
+|--------|----------|-------------|
+| `GET` | `/api/todotasks` | Get all tasks (with optional filters) |
+| `GET` | `/api/todotasks/{id}` | Get a specific task |
+| `POST` | `/api/todotasks` | Create a new task |
+| `PATCH` | `/api/todotasks/{id}` | Partially update a task |
+| `PATCH` | `/api/todotasks/{id}/toggle` | Toggle task completion status |
+| `DELETE` | `/api/todotasks/{id}` | Delete a task |
+
+### Query Parameters (GET /api/todotasks)
+
+- `isCompleted` - Filter by completion status (true/false)
+- `priority` - Filter by priority (Low, Medium, High, Urgent)
+
+### Example Requests
+
+**Create a task:**
+```json
+POST /api/todotasks
+{
+  "title": "Complete project documentation",
+  "description": "Write comprehensive README",
+  "priority": "High",
+  "dueDate": "2025-12-31",
+  "tags": "documentation,urgent"
+}
+```
+
+**Partial update:**
+```json
+PATCH /api/todotasks/{id}
+{
+  "description": "Updated description"
+}
+```
+
+Only the provided fields will be updated.
+
+---
+
+## 🧪 Testing
+
+The project includes comprehensive unit tests covering:
+- Service layer business logic
+- FluentValidation validators
+- Edge cases and error scenarios
+
+**Run tests:**
+```bash
+dotnet test
+```
+
+**Test coverage:**
+- 16 Service tests
+- 18 Validator tests
+- Total: 34 tests
+
+---
+
+## 🏛️ Project Structure
+```
+TodoApi/
+├── src/
+│   ├── TodoApi/                    # API Layer
+│   │   ├── Controllers/            # REST controllers
+│   │   ├── Services/               # Business logic
+│   │   │   ├── Interfaces/
+│   │   │   └── Implementations/
+│   │   ├── DTOs/                   # Data transfer objects
+│   │   ├── Validators/             # FluentValidation rules
+│   │   ├── Mappings/               # AutoMapper profiles
+│   │   ├── Filters/                # Action filters
+│   │   ├── Middleware/             # Exception handling
+│   │   └── Converters/             # JSON converters
+│   │
+│   ├── TodoApi.Core/               # Domain Layer
+│   │   ├── Entities/               # Domain models
+│   │   └── Interfaces/
+│   │       └── Repositories/       # Repository contracts
+│   │
+│   └── TodoApi.Infrastructure/     # Infrastructure Layer
+│       ├── Data/                   # DbContext
+│       ├── Configurations/         # EF configurations
+│       ├── Repositories/           # Repository implementations
+│       └── Migrations/             # EF migrations
+│
+├── tests/
+│   └── TodoApi.UnitTests/          # Unit tests
+│       ├── Services/
+│       └── Validators/
+│
+├── Dockerfile                      # API container image
+├── docker-compose.yml              # Multi-container setup
+└── .env.example                    # Environment variables template
+```
+
+---
+
+## 🔧 Configuration
+
+### Environment Variables
+
+Create a `.env` file in the project root:
+```env
+SA_PASSWORD=YourStrongPassword123!
+DATABASE_NAME=TodoApiDb
+```
+
+### Connection String
+
+The API automatically uses the connection string from environment variables when running in Docker.
+
+For local development, update `appsettings.json`:
+```json
+{
+  "ConnectionStrings": {
+    "DefaultConnection": "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=true"
+  }
+}
+```
+
+---
+
+## 🎯 Features
+
+- ✅ **Clean Architecture** - Separation of concerns
+- ✅ **Repository Pattern** - Data access abstraction
+- ✅ **RESTful API** - Following REST best practices
+- ✅ **Input Validation** - FluentValidation for request validation
+- ✅ **Global Exception Handling** - Centralized error responses
+- ✅ **Auto Mapping** - AutoMapper for DTO conversions
+- ✅ **Flexible Date Parsing** - Multiple date formats supported
+- ✅ **Enum as Strings** - User-friendly priority values
+- ✅ **PATCH Support** - Partial updates of resources
+- ✅ **Swagger Documentation** - Interactive API docs
+- ✅ **Docker Support** - Easy deployment
+- ✅ **Unit Tests** - Comprehensive test coverage
+- ✅ **Database Seeding** - Sample data on startup
+
+---
+
+## 🐳 Docker Commands
+```bash
+# Start services
+docker-compose up
+
+# Start in background
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+
+# Remove everything (including database)
+docker-compose down -v
+
+# Rebuild after code changes
+docker-compose up --build
+```
+
+---
+
+## 📖 API Documentation
+
+Once the application is running, visit:
+- **Swagger UI:** http://localhost:5000/swagger
+- **OpenAPI JSON:** http://localhost:5000/swagger/v1/swagger.json
+
+---
+
+## 🤝 Contributing
+
+This is a portfolio project, but feedback and suggestions are welcome!
+
+---
+
+## 📄 License
+
+This project is open source and available under the MIT License.
+
+---
+
+## 👤 Author
+
+**Your Name**
+- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
+- LinkedIn: [Your LinkedIn](https://linkedin.com/in/your-profile)
+
+---
+
+## 🙏 Acknowledgments
+
+Built as part of my journey learning Clean Architecture and modern .NET development practices.
