@@ -284,7 +284,7 @@ This project is open source and available under the MIT License.
 
 **Your Name**
 - GitHub: [@JayLog22](https://github.com/JayLog22)
-- LinkedIn: [Julián Vega]([https://linkedin.com/in/your-profile](https://www.linkedin.com/in/julian-vega/))
+- LinkedIn: [Julián Vega](https://www.linkedin.com/in/julian-vega/)
 
 ---
 
