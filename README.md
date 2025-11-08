@@ -77,13 +77,26 @@ That's it! 🎉 The API and database are now running.
    - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
    - [SQL Server](https://www.microsoft.com/sql-server/sql-server-downloads)
 
-2. **Update connection string**
-   Edit `src/TodoApi/appsettings.json` with your SQL Server connection.
+2. **Configure User Secrets**
+   Store sensitive connection strings securely using .NET User Secrets instead of storing them in `appsettings.json`:
+
+   ```bash
+   # Initialize User Secrets for the project
+   cd src/TodoApi
+   dotnet user-secrets init
+
+   # Set the database connection string with your actual password
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_PASSWORD;MultipleActiveResultSets=true;TrustServerCertificate=true"
+   ```
+
+   The connection string will override the placeholder in `appsettings.json` during local development.
+
+   > **Why User Secrets?** User Secrets keeps sensitive data out of version control and prevents accidental exposure of credentials in repositories.
 
 3. **Run migrations**
-```bash
+   ```bash
    dotnet ef database update --project src/TodoApi.Infrastructure --startup-project src/TodoApi
-```
+   ```
 
 4. **Run the API**
 ```bash
