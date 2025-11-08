@@ -22,3 +22,8 @@ _ReSharper.Caches/
 #JetBrains Rider
 .idea/
 *.sln.iml
+
+# Environment variables
+.env
+.env.local
+.env.*.local
