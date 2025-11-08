@@ -1,6 +1,6 @@
 # 📝 Todo API
 
-![Build Status](https://github.com/YOUR_USERNAME/todo-api/actions/workflows/dotnet.yml/badge.svg)
+![Build Status](https://github.com/JayLog22/todo-api/actions/workflows/dotnet.yml/badge.svg)
 
 A RESTful API for managing todo tasks built with .NET 8, following Clean Architecture principles.
 
