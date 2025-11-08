@@ -55,14 +55,21 @@ TodoApi/
 ```
 
 2. **Create environment file**
-```bash
+   ```bash
    cp .env.example .env
-```
+   ```
+
+   > The `.env` file contains `SA_PASSWORD` and is ignored by `.gitignore` for security. Never commit it!
 
 3. **Start the application**
-```bash
+   ```bash
    docker-compose up
-```
+   ```
+
+   Docker will:
+   - Create a SQL Server container with the password from `.env`
+   - Create an API container with the connection string
+   - Run migrations automatically on startup
 
 4. **Open Swagger UI**
 ```
@@ -77,18 +84,38 @@ That's it! 🎉 The API and database are now running.
    - [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0)
    - [SQL Server](https://www.microsoft.com/sql-server/sql-server-downloads)
 
-2. **Update connection string**
-   Edit `src/TodoApi/appsettings.json` with your SQL Server connection.
+2. **Configure User Secrets**
+   Store sensitive connection strings securely using .NET User Secrets instead of storing them in `appsettings.json`:
+
+   ```bash
+   # Navigate to the API project
+   cd src/TodoApi
+
+   # Initialize User Secrets for this project (creates a secrets ID in csproj)
+   dotnet user-secrets init
+
+   # Set the database connection string with your actual SQL Server password
+   # Replace YOUR_PASSWORD with your actual SA password
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=true;MultipleActiveResultSets=true"
+   ```
+
+   **How it works:**
+   - User Secrets are stored locally in `%APPDATA%\Microsoft\UserSecrets\<guid>` (Windows) and **never committed to git**
+   - In development, User Secrets override the values in `appsettings.json` automatically
+   - The `appsettings.json` contains a placeholder that will be ignored during local development
+   - In Docker, the connection string comes from environment variables in the `.env` file
+
+   > **Why User Secrets?** Keeps sensitive data out of version control and prevents accidental exposure of credentials.
 
 3. **Run migrations**
-```bash
+   ```bash
    dotnet ef database update --project src/TodoApi.Infrastructure --startup-project src/TodoApi
-```
+   ```
 
 4. **Run the API**
-```bash
+   ```bash
    dotnet run --project src/TodoApi
-```
+   ```
 
 ---
 
@@ -196,26 +223,52 @@ TodoApi/
 
 ## 🔧 Configuration
 
-### Environment Variables
+### Environment Variables (Docker)
 
-Create a `.env` file in the project root:
+For Docker deployments, create a `.env` file in the project root:
 ```env
 SA_PASSWORD=YourStrongPassword123!
 DATABASE_NAME=TodoApiDb
 ```
 
-### Connection String
+The `docker-compose.yml` uses these variables to:
+1. Set the SQL Server `sa` password
+2. Build the connection string passed as an environment variable to the API container
 
-The API automatically uses the connection string from environment variables when running in Docker.
-
-For local development, update `appsettings.json`:
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=true"
-  }
-}
+**Docker Connection String Flow:**
 ```
+.env file → docker-compose.yml environment variables → API container → Connection to DB
+```
+
+### User Secrets (Local Development)
+
+For local development without Docker, use .NET User Secrets to securely store your actual connection string:
+
+```bash
+cd src/TodoApi
+
+# One-time setup
+dotnet user-secrets init
+
+# Store your actual connection string with your SA password
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_ACTUAL_PASSWORD;TrustServerCertificate=true;MultipleActiveResultSets=true"
+
+# Verify it was set
+dotnet user-secrets list
+```
+
+**Local Development Connection String Flow:**
+```
+SQL Server (local) ← User Secrets (password stored securely) ← dotnet run
+                   ← appsettings.json (placeholder, ignored)
+```
+
+### Configuration Priority
+
+When running the application:
+1. **User Secrets** (local development) - highest priority, overrides everything
+2. **Environment Variables** (Docker) - second priority
+3. **appsettings.json** - fallback (placeholder values, should never be used in production)
 
 ---
 
