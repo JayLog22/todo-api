@@ -50,7 +50,7 @@ TodoApi/
 
 1. **Clone the repository**
 ```bash
-   git clone https://github.com/YOUR_USERNAME/todo-api.git
+   git clone https://github.com/JayLog22/todo-api.git
    cd todo-api
 ```
 
@@ -283,8 +283,8 @@ This project is open source and available under the MIT License.
 ## 👤 Author
 
 **Your Name**
-- GitHub: [@YOUR_USERNAME](https://github.com/YOUR_USERNAME)
-- LinkedIn: [Your LinkedIn](https://linkedin.com/in/your-profile)
+- GitHub: [@JayLog22](https://github.com/JayLog22)
+- LinkedIn: [Julián Vega]([https://linkedin.com/in/your-profile](https://www.linkedin.com/in/julian-vega/))
 
 ---
 
