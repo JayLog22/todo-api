@@ -55,14 +55,21 @@ TodoApi/
 ```
 
 2. **Create environment file**
-```bash
+   ```bash
    cp .env.example .env
-```
+   ```
+
+   > The `.env` file contains `SA_PASSWORD` and is ignored by `.gitignore` for security. Never commit it!
 
 3. **Start the application**
-```bash
+   ```bash
    docker-compose up
-```
+   ```
+
+   Docker will:
+   - Create a SQL Server container with the password from `.env`
+   - Create an API container with the connection string
+   - Run migrations automatically on startup
 
 4. **Open Swagger UI**
 ```
