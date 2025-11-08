@@ -81,17 +81,23 @@ That's it! 🎉 The API and database are now running.
    Store sensitive connection strings securely using .NET User Secrets instead of storing them in `appsettings.json`:
 
    ```bash
-   # Initialize User Secrets for the project
+   # Navigate to the API project
    cd src/TodoApi
+
+   # Initialize User Secrets for this project (creates a secrets ID in csproj)
    dotnet user-secrets init
 
    # Set the database connection string with your actual password
-   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_PASSWORD;MultipleActiveResultSets=true;TrustServerCertificate=true"
+   dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=true;MultipleActiveResultSets=true"
    ```
 
-   The connection string will override the placeholder in `appsettings.json` during local development.
+   **How it works:**
+   - User Secrets are stored locally and **never committed to git**
+   - In development, User Secrets override the values in `appsettings.json` and `appsettings.Development.json`
+   - The `appsettings.json` contains only placeholders (like `${SA_PASSWORD}`)
+   - In Docker, environment variables override the placeholder values
 
-   > **Why User Secrets?** User Secrets keeps sensitive data out of version control and prevents accidental exposure of credentials in repositories.
+   > **Why User Secrets?** Keeps sensitive data out of version control and prevents accidental exposure of credentials.
 
 3. **Run migrations**
    ```bash
@@ -99,9 +105,9 @@ That's it! 🎉 The API and database are now running.
    ```
 
 4. **Run the API**
-```bash
+   ```bash
    dotnet run --project src/TodoApi
-```
+   ```
 
 ---
 
@@ -209,26 +215,29 @@ TodoApi/
 
 ## 🔧 Configuration
 
-### Environment Variables
+### Environment Variables (Docker)
 
-Create a `.env` file in the project root:
+For Docker deployments, create a `.env` file in the project root:
 ```env
 SA_PASSWORD=YourStrongPassword123!
 DATABASE_NAME=TodoApiDb
 ```
 
-### Connection String
+The `docker-compose.yml` uses these variables to configure both the SQL Server container and the API's connection string.
 
-The API automatically uses the connection string from environment variables when running in Docker.
+### User Secrets (Local Development)
 
-For local development, update `appsettings.json`:
-```json
-{
-  "ConnectionStrings": {
-    "DefaultConnection": "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=true"
-  }
-}
+For local development without Docker, use .NET User Secrets to store the connection string securely:
+
+```bash
+cd src/TodoApi
+dotnet user-secrets set "ConnectionStrings:DefaultConnection" "Server=localhost,1433;Database=TodoApiDb;User Id=sa;Password=YOUR_PASSWORD;TrustServerCertificate=true;MultipleActiveResultSets=true"
 ```
+
+**Configuration Priority:**
+1. User Secrets (local development) - highest priority
+2. Environment Variables (Docker) - second priority
+3. `appsettings.json` - fallback (contains only placeholders)
 
 ---
 
